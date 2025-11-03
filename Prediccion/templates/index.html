@@ -1,0 +1,81 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Predicción de Cliente</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f6f8fa;
+        }
+        .container {
+            width: 400px;
+            margin: 50px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+
+        input, button {
+            width: 100%;
+            max-width: 100%;
+            padding: 8px;
+            margin: 5px 0 10px;
+            box-sizing: border-box; /* <-- importante */
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+
+        .error {
+            color: red;
+            font-weight: bold;
+        }
+
+        .debug {
+            font-size: 0.9em;
+            color: #333;
+            background: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-wrap: break-word;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Predicción de Cliente</h1>
+        <form method="POST" action="{% url 'predecir' %}">
+            {% csrf_token %}
+            <label>Nombre:</label>
+            <input type="text" name="nombre" required>
+
+            <label>Edad:</label>
+            <input type="number" name="edad" required>
+
+            <label>Salario:</label>
+            <input type="number" step="0.01" name="salario" required>
+
+            <button type="submit">Predecir</button>
+        </form>
+        {% if resultado %}
+            <hr>
+            <h2>Resultado:</h2>
+            <p><strong>Nombre:</strong> {{ resultado.nombre }}</p>
+            <p><strong>Edad:</strong> {{ resultado.edad }}</p>
+            <p><strong>Salario:</strong> ${{ resultado.salario }}</p>
+            <p><strong>Probabilidad de compra:</strong> {{ resultado.probabilidad_compra|floatformat:2 }}</p>
+            <p><strong>Confianza:</strong> {{ resultado.confianza|floatformat:2 }}</p>
+            <p><strong>Recomendación:</strong> {{ resultado.recomendacion }}</p>
+            <p><strong>Acción sugerida:</strong> {{ resultado.accion }}</p>
+        {% endif %}
+    </div>
+</body>
+</html>
